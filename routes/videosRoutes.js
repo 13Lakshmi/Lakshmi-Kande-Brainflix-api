@@ -18,34 +18,34 @@ router.get("/:videosId",(req,res) =>{
     const videosBuffer = fs.readFileSync("./data/video-details.json");
     const videos = JSON.parse(videosBuffer);
 
-   // console.log(videos);
-
-    const selectedVideo = videos.find(
-        (videolist) => videolist.id === videosId
-    );
-    res.status(201).send(selectedVideo);
+    const selectedVideo = videos.find( (videolist) =>{
+    return videolist.id === videosId;
+    });   
+    if(selectedVideo){
+        res.send(selectedVideo);
+    }else{
+    res.status(201).send("selectedVideo not found");
+    }
 });
 
-
-
-
-// router.post("/",(req,res) =>{
-//    console.log(req.body);
-//     res.send("vidoes submitted");
-// })
 
 
 router.post("/",(req,res) =>{
     console.log(req.body);
 
-    const videosJSON = fs.readFileSync("./data/video-details.json");
-    const videos = JSON.parse(videosJSON);
-
     const newVideoDetail = {
         id : uuid(),
         title: req.body.title,
         channel:req.body.channel,
+        views: "0",
+        likes: "0",
+        duration: "4:01",
+        timestamp:Date.now(),
+        Comments:[],
+        image:"image9.jpg"
     };
+    const videosJSON = fs.readFileSync("./data/video-details.json");
+    const videos = JSON.parse(videosJSON);
 
     videos.push(newVideoDetail);
 
@@ -54,12 +54,6 @@ router.post("/",(req,res) =>{
 
     res.status(201).send("videos submitted successfully")
 });
-
-
-
-
-
-
 
 
 
